@@ -9,6 +9,6 @@
     <string name="artists">Artistes</string>
     <string name="genres">Genres</string>
     <string name="folders">Dossiers</string>
-    <string name="allow_music_access">Autoriser l'accès à la musique</string>
+    <string name="allow_music_access">Autoriser l\'accès à la musique</string>
     <string name="rescan_library">Actualiser la bibliothèque</string>
 </resources>

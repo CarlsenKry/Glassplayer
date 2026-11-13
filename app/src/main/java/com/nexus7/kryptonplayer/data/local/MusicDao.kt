@@ -19,8 +19,11 @@ interface MusicDao {
     @Upsert
     suspend fun upsertTracks(tracks: List<TrackEntity>)
 
-    @Query("DELETE FROM songs WHERE mediaId NOT IN (:existingIds)")
-    suspend fun deleteTracksNotIn(existingIds: List<Long>)
+    @Query("SELECT mediaId FROM songs")
+    suspend fun getAllTrackIds(): List<Long>
+
+    @Query("DELETE FROM songs WHERE mediaId IN (:ids)")
+    suspend fun deleteTracksByIds(ids: List<Long>)
 
     @Query("DELETE FROM songs")
     suspend fun deleteAllTracks()

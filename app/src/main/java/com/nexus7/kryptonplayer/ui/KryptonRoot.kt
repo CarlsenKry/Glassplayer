@@ -31,12 +31,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.QueueMusic
 import androidx.compose.material.icons.rounded.Album
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.QueueMusic
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -64,7 +64,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.nexus7.kryptonplayer.data.repository.ScanOutcome
@@ -295,10 +295,10 @@ private fun MainNavigationBar(
                 val icon = when (tab) {
                     MainTab.Library -> Icons.Rounded.LibraryMusic
                     MainTab.Search -> Icons.Rounded.Search
-                    MainTab.Playlists -> Icons.Rounded.QueueMusic
+                    MainTab.Playlists -> Icons.AutoMirrored.Rounded.QueueMusic
                     MainTab.Settings -> Icons.Rounded.Settings
                 }
-                androidx.compose.material3.NavigationBarItem(
+                NavigationBarItem(
                     selected = selected,
                     onClick = { onSelect(tab) },
                     icon = { Icon(icon, contentDescription = tab.label) },

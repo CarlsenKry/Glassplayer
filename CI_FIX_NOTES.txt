@@ -31,3 +31,33 @@ android-actions/setup-android@v3 and requested "tools platform-tools". After
 copying this archive into your target repository, commit and push the updated
 .github/workflows/android-ci.yml to the branch that triggers the workflow.
 The next run should show setup-android@v4 and must not contain "sdkmanager tools".
+
+----------------------------------------------------------------------
+BUILD FIX (follow-up to the failed run "Verify and build APK")
+----------------------------------------------------------------------
+Failure in the log: app/build.gradle.kts line 45
+  "Using 'jvmTarget: String' is an error. Please migrate to the compilerOptions DSL"
+Cause: Kotlin 2.4 removed android { kotlinOptions { } }.
+
+Fixed:
+1. app/build.gradle.kts: JVM target now set in a TOP-LEVEL kotlin { compilerOptions { } }
+   block (the previous attempt nested it inside android { }).
+2. Toolchain made self-consistent. AGP 8.13.2 + compileSdk 36 cannot consume the
+   newest AndroidX (core 1.19, activity 1.13, lifecycle 2.11, hilt-navigation-compose
+   1.4, Compose BOM 2026.08+), which need AGP 9.x / compileSdk 37. Pinned to:
+   Kotlin 2.3.21, KSP 2.3.6, Compose BOM 2026.06.01, core-ktx 1.18.0,
+   activity-compose 1.12.4, lifecycle 2.10.0, datastore 1.2.1,
+   androidx.hilt:hilt-lifecycle-viewmodel-compose 1.3.0 (navigation-compose removed:
+   it was unused).
+3. Hilt 2.57.2 + new Kotlin metadata: kotlin-metadata-jvm is forced to 2.3.21 in
+   app/build.gradle.kts (Dagger has no release that reads Kotlin 2.4 metadata yet).
+4. LibraryScreen: PaddingValues(horizontal=, bottom=) is not a valid overload.
+5. PlaybackViewModel: Context.mainExecutor needs API 28 (minSdk is 26) -> ContextCompat;
+   removed a stray @UnstableApi that would have failed lint at every call site.
+6. Deprecated non-mirrored icons replaced by Icons.AutoMirrored.*.
+7. values-fr: unescaped apostrophe (l'accès) fixed.
+8. MediaLibraryRepository: stale-track cleanup now deletes in chunks of 500
+   (a single NOT IN (...) with thousands of ids can exceed SQLite's variable limit).
+9. CI: unit tests + assembleDebug are blocking; lint runs as a separate non-blocking
+   step. gradlew is now executable in git.
+No local compilation was possible (no network/Gradle in the authoring sandbox).

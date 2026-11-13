@@ -1,6 +1,5 @@
 package com.nexus7.kryptonplayer.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,15 +23,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.List
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Album
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.GridView
-import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
@@ -62,7 +61,6 @@ import kotlinx.coroutines.launch
 
 private val sections = listOf("Songs", "Albums", "Artists", "Genres", "Folders", "Playlists")
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LibraryScreen(
     tracks: List<Track>,
@@ -114,10 +112,10 @@ fun LibraryScreen(
                 }
             }
             IconButton(onClick = { gridMode = !gridMode }) {
-                Icon(if (gridMode) Icons.Rounded.List else Icons.Rounded.GridView, contentDescription = "Toggle grid or list")
+                Icon(if (gridMode) Icons.AutoMirrored.Rounded.List else Icons.Rounded.GridView, contentDescription = "Toggle grid or list")
             }
             Box {
-                IconButton(onClick = { showSortMenu = true }) { Icon(Icons.Rounded.Sort, contentDescription = "Sort") }
+                IconButton(onClick = { showSortMenu = true }) { Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort") }
                 DropdownMenu(expanded = showSortMenu, onDismissRequest = { showSortMenu = false }) {
                     listOf("Title", "Artist", "Date added", "Duration").forEach { option ->
                         DropdownMenuItem(
@@ -286,7 +284,7 @@ private fun CollectionList(items: List<CollectionItem>, onPlay: (CollectionItem)
     if (items.isEmpty()) {
         EmptyLibraryState("Nothing here yet", "Your library will appear after a scan.")
     } else {
-        LazyColumn(contentPadding = PaddingValues(horizontal = 18.dp, bottom = 180.dp)) {
+        LazyColumn(contentPadding = PaddingValues(start = 18.dp, end = 18.dp, bottom = 180.dp)) {
             items(items, key = { it.title }) { item ->
                 Row(
                     modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp)).clickable { onPlay(item) }.padding(vertical = 8.dp),

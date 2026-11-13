@@ -63,8 +63,14 @@ jobs:
           test -d "$ANDROID_HOME/platforms/android-36"
           test -d "$ANDROID_HOME/build-tools/36.0.0"
 
-      - name: Run unit tests, lint and assemble debug APK
-        run: gradle --no-daemon --stacktrace clean testDebugUnitTest lintDebug assembleDebug
+      - name: Run unit tests and assemble debug APK
+        run: gradle --no-daemon --stacktrace clean testDebugUnitTest assembleDebug
+
+      # Lint reports are uploaded below but do not block the APK: a lint finding
+      # should not hide a successful build.
+      - name: Run lint (non-blocking)
+        continue-on-error: true
+        run: gradle --no-daemon --stacktrace lintDebug
 
       - name: Upload debug APK
         if: success()

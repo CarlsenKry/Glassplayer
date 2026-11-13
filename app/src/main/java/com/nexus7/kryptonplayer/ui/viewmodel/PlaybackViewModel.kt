@@ -2,6 +2,7 @@ package com.nexus7.kryptonplayer.ui.viewmodel
 
 import android.content.ComponentName
 import android.content.Context
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
@@ -21,7 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@androidx.media3.common.util.UnstableApi
 @HiltViewModel
 class PlaybackViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -66,7 +66,7 @@ class PlaybackViewModel @Inject constructor(
                         }
                     }
             },
-            context.mainExecutor,
+            ContextCompat.getMainExecutor(context),
         )
     }
 

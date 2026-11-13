@@ -65,7 +65,13 @@ class MediaLibraryRepository @Inject constructor(
                         dao.deleteAllTracks()
                     } else {
                         dao.upsertTracks(scanned)
-                        dao.deleteTracksNotIn(scanned.map { it.mediaId })
+                        // Delete in chunks: SQLite caps bound variables per statement
+                        // (999 on older Android versions), so one huge NOT IN (...) can crash.
+                        val scannedIds = scanned.mapTo(HashSet()) { it.mediaId }
+                        dao.getAllTrackIds()
+                            .filterNot { it in scannedIds }
+                            .chunked(500)
+                            .forEach { dao.deleteTracksByIds(it) }
                     }
                 }
                 registerChangeObserver()
