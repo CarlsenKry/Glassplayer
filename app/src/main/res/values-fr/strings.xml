@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Krypton Player</string>
+    <string name="library">Bibliothèque</string>
+    <string name="search">Rechercher</string>
+    <string name="playlists">Listes de lecture</string>
+    <string name="settings">Paramètres</string>
+    <string name="songs">Morceaux</string>
+    <string name="albums">Albums</string>
+    <string name="artists">Artistes</string>
+    <string name="genres">Genres</string>
+    <string name="folders">Dossiers</string>
+    <string name="allow_music_access">Autoriser l'accès à la musique</string>
+    <string name="rescan_library">Actualiser la bibliothèque</string>
+</resources>

@@ -1,0 +1,33 @@
+KRYPTON PLAYER — CI TOOLCHAIN UPDATE
+
+What changed in this archive:
+
+1. Replaced the legacy Android SDK setup action usage with
+   android-actions/setup-android@v4.
+2. Explicitly requested only platform-tools from the setup action. The workflow
+   never requests the removed SDK package named "tools".
+3. Let setup-android install its current command-line tools, then installed
+   platforms;android-36 and build-tools;36.0.0 with sdkmanager.
+4. Updated the other GitHub Actions to current major releases:
+   actions/checkout@v7, actions/setup-java@v6,
+   gradle/actions/setup-gradle@v6, actions/upload-artifact@v7.
+5. Pinned CI to JDK 17 and Gradle 8.14.7. CI invokes the Gradle installation
+   directly because this project uses lightweight gradlew bootstrap scripts,
+   not the standard Gradle Wrapper JAR.
+6. Added toolchain verification and uploads build reports/test results even
+   after a build failure, so later errors are easier to diagnose.
+7. Updated scripts/selfcheck.py to validate the new CI configuration.
+
+Validation performed for this archive:
+- scripts/selfcheck.py: 63/63 checks passed.
+- GitHub Actions YAML parsed successfully.
+- No APK compilation is claimed. This environment could not download the
+  Gradle distribution because services.gradle.org DNS/network access failed.
+  GitHub Actions must run the Gradle tasks to confirm compilation on its runner.
+
+Important:
+The uploaded failure log was produced by a workflow that still ran
+android-actions/setup-android@v3 and requested "tools platform-tools". After
+copying this archive into your target repository, commit and push the updated
+.github/workflows/android-ci.yml to the branch that triggers the workflow.
+The next run should show setup-android@v4 and must not contain "sdkmanager tools".
