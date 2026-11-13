@@ -65,9 +65,9 @@ These are substantial audio/platform features. The crossfade engine in particula
 Requirements:
 
 - JDK 17
-- Android SDK Platform 36
-- Android Build Tools 36.0.0
-- Gradle 8.14.7 (the `gradlew` / `gradlew.bat` bootstrap scripts use an installed Gradle if available, otherwise download the pinned distribution; Windows requires PowerShell)
+- Android SDK Platform 37.0 (`compileSdk 37`; `targetSdk` stays 36)
+- Android Build Tools 36.0.0 or newer
+- Gradle 9.3.1 (required by Android Gradle Plugin 9.1) (the `gradlew` / `gradlew.bat` bootstrap scripts use an installed Gradle if available, otherwise download the pinned distribution; Windows requires PowerShell)
 
 From the project root:
 
@@ -92,12 +92,12 @@ Open the app, grant audio access, press refresh, tap a song and verify that play
 
 ## GitHub Actions
 
-The workflow at `.github/workflows/android-ci.yml` runs on pushes to `main` / `develop`, pull requests and manual dispatch. It uses the current major releases of the GitHub Actions checkout, Java, Gradle, Android SDK setup and artifact upload actions. It runs `scripts/selfcheck.py` before toolchain provisioning, installs JDK 17, Gradle 8.14.7, Android Platform 36 and Build Tools 36.0.0, then runs unit tests, lint and the debug APK build. It uploads the APK on success and build reports/test results even when a later build step fails. Android SDK setup uses `android-actions/setup-android@v4`, which no longer asks for Google's removed legacy `tools` package.
+The workflow at `.github/workflows/android-ci.yml` runs on pushes to `main` / `develop`, pull requests and manual dispatch. It uses the current major releases of the GitHub Actions checkout, Java, Gradle, Android SDK setup and artifact upload actions. It runs `scripts/selfcheck.py` before toolchain provisioning, installs JDK 17, Gradle 9.3.1, Android Platform 37.0 and Build Tools 36.0.0 / 37.0.0, then runs unit tests, lint and the debug APK build. It uploads the APK on success and build reports/test results even when a later build step fails. Android SDK setup uses `android-actions/setup-android@v4`, which no longer asks for Google's removed legacy `tools` package.
 
 ## Notes
 
 - This environment did not have an Android SDK or Gradle installation, so no local APK compilation is claimed. GitHub Actions is configured to perform the actual Gradle build. CI runs the Python self-check before Android SDK provisioning so structural failures remain visible even if SDK installation fails.
-- The CI workflow invokes the pinned Gradle 8.14.7 installation directly. The included `gradlew` scripts are lightweight local bootstrap scripts, not the standard Gradle Wrapper JAR distribution.
+- The CI workflow invokes the pinned Gradle 9.3.1 installation directly. The included `gradlew` scripts are lightweight local bootstrap scripts, not the standard Gradle Wrapper JAR distribution.
 - The repository is configured for `targetSdk 36`; confirm the final target policy and SDK packages again before Play Store publication.
 - `applicationId` is a project identifier. Change it before first public release if a different package namespace is desired.
 - Haze Glass is designed to fall back when the full rendering path is unavailable. Profile glass density and GPU memory on low/mid-range hardware; do not apply full glass blur to every item in a fast-scrolling list.

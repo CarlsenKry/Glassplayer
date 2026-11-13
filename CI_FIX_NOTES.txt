@@ -61,3 +61,29 @@ Fixed:
 9. CI: unit tests + assembleDebug are blocking; lint runs as a separate non-blocking
    step. gradlew is now executable in git.
 No local compilation was possible (no network/Gradle in the authoring sandbox).
+
+----------------------------------------------------------------------
+BUILD FIX 3: ":app:checkDebugAarMetadata" — 31 issues (AGP 8.13.2 / compileSdk 36)
+----------------------------------------------------------------------
+Failure in the log: Haze 2.1.0, Coil 3.6.3 and (through them) Compose 1.12.1 and
+lifecycle 2.11.0 are built for compileSdk 37 and, for the AndroidX ones, AGP 9.1+.
+Pinning the Compose BOM / lifecycle to older versions did NOT help: the BOM is only a
+recommendation, and Gradle resolves the highest version any dependency asks for. Haze
+and Coil themselves require compileSdk 37, and the code uses Haze 2.x's glass API
+(hazeGlass/GlassStyle), so downgrading them was not an option.
+
+Fix = move the toolchain forward instead of pinning backwards:
+1. AGP 8.13.2 -> 9.1.0, Gradle 8.14.7 -> 9.3.1 (build.gradle.kts, gradlew,
+   gradlew.bat, gradle-wrapper.properties, CI).
+2. compileSdk 36 -> 37 (targetSdk stays 36). CI installs platforms;android-37.0 and
+   build-tools 36.0.0 + 37.0.0.
+3. AGP 9 has built-in Kotlin: removed org.jetbrains.kotlin.android and the
+   kotlin { compilerOptions } block (JVM target follows compileOptions = 17).
+4. Hilt 2.57.2 -> 2.60 (the Hilt Gradle plugin only supports AGP 9 from 2.59; 2.60 is
+   built against Kotlin 2.3.21, matching this project).
+5. Compose BOM 2026.06.01 -> 2026.08.00 (the Compose 1.12 train that Haze/Coil already
+   pulled in), core-ktx 1.18.0 -> 1.19.0, lifecycle 2.10.0 -> 2.11.0, so declared
+   versions match what Gradle resolves.
+6. gradle.properties: android.suppressUnsupportedCompileSdk=37 (harmless safety net).
+7. scripts/selfcheck.py and README updated to the new toolchain.
+Not compiled here (no network in the authoring sandbox); CI is the real test.

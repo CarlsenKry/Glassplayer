@@ -1,6 +1,6 @@
 @echo off
 setlocal EnableExtensions
-set "GRADLE_VERSION=8.14.7"
+set "GRADLE_VERSION=9.3.1"
 where gradle >NUL 2>NUL
 if %ERRORLEVEL% EQU 0 (
   gradle %*

@@ -35,10 +35,10 @@ jobs:
 
       # This project uses the installed Gradle distribution rather than a
       # standard gradle-wrapper.jar. Pin the same version as gradlew scripts.
-      - name: Set up Gradle 8.14.7
+      - name: Set up Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.14.7'
+          gradle-version: '9.3.1'
           cache-provider: basic
 
       # v4 uses current command-line tools and does not request Google's
@@ -48,10 +48,10 @@ jobs:
         with:
           packages: 'platform-tools'
 
-      - name: Install Android SDK 36
+      - name: Install Android SDK 37
         shell: bash
         run: |
-          sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
+          sdkmanager --install "platforms;android-37.0" "build-tools;36.0.0" "build-tools;37.0.0"
           sdkmanager --list_installed
 
       - name: Verify build toolchain
@@ -60,8 +60,9 @@ jobs:
           java -version
           gradle --version
           sdkmanager --version
-          test -d "$ANDROID_HOME/platforms/android-36"
+          test -d "$ANDROID_HOME/platforms/android-37.0"
           test -d "$ANDROID_HOME/build-tools/36.0.0"
+          test -d "$ANDROID_HOME/build-tools/37.0.0"
 
       - name: Run unit tests and assemble debug APK
         run: gradle --no-daemon --stacktrace clean testDebugUnitTest assembleDebug

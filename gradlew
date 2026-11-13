@@ -2,7 +2,7 @@
 # Lightweight wrapper bootstrap. It uses an installed Gradle when available;
 # otherwise it downloads the pinned Gradle distribution into GRADLE_USER_HOME.
 set -eu
-GRADLE_VERSION="8.14.7"
+GRADLE_VERSION="9.3.1"
 if command -v gradle >/dev/null 2>&1; then
   exec gradle "$@"
 fi
